@@ -1,0 +1,8 @@
+1.First of all, do not download the latest versions of python
+2.Open a command line in Windows "cmd" and check the python version by typing "python --version"
+3. Enter "pip install kiwi" to your cmd.
+4. after installation if you want to use it in PyCharm(Follow next steps)
+for PyCharm:
+1.go to settings left upper corner Fily>>Settings>>(your project)>>Python Interprefer.
+2.press to the PLUS button, then find "kivy" in search line.
+3.Dowload it.
