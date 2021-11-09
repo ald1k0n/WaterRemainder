@@ -1,1 +1,7 @@
-fdghhdfg
+#program frame
+import turtle
+wn = turtle.Screen()
+wn.title ("Remainder")
+wn.bgcolor("cyan")
+
+wn.mainloop()
