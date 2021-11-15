@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "870586961265",
+    "project_id": "water-dac56",
+    "storage_bucket": "water-dac56.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:870586961265:android:c8fd6fd7a0f21f40fbbad0",
+        "android_client_info": {
+          "package_name": "com.temjoy.com"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "870586961265-bbtjcrst856nbnfgl59d42vn573pkmja.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": " AAAAyrMGzXE:APA91bFf2t-Ywv-V2Vo45nku2AwP7QYh1AwLb9aucMP57boxWGtHFAnXZSJDhDiqwMTCLIUFLIZlbhzedq2_mm9s-FkUgwoICXId-JVFyjcEv-6_9_jOvAk7LUIXluhVHNz7F6Ka7AIP "
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "870586961265-bbtjcrst856nbnfgl59d42vn573pkmja.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
