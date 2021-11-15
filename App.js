@@ -5,20 +5,42 @@ import React,  { useState, useEffect, useRef, Component } from 'react';
 import { SafeAreaView,ImageBackground, StyleSheet, Text, View, Button,Image, Dimensions,TouchableOpacity } from 'react-native';
 import { Platform } from 'react-native';
 
+
+
 import axios from 'axios';
 
-Notifications.setNotificationHandler({handleNotification: async () => ({ shouldShowAlert: true, shouldPlaySound: false, shouldSetBadge: false, })});async function registerForPushNotificationsAsync() { let token; if (Constants.isDevice) { const { status: existingStatus } = await Notifications.getPermissionsAsync(); let finalStatus = existingStatus; if (existingStatus !== 'granted') { const { status } = await Notifications.requestPermissionsAsync(); finalStatus = status; } token = (await Notifications.getExpoPushTokenAsync()).data; } else { console.log('Must use physical device for Push Notifications'); } if (Platform.OS === 'android') { Notifications.setNotificationChannelAsync('default', { name: 'default', importance: Notifications.AndroidImportance.MAX, vibrationPattern: [0, 250, 250, 250], lightColor: '#FF231F7C', }); } return token; }
-const screen=Dimensions.get('window');
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
 
 
 export default function App() {
+  const [expoPushToken, setExpoPushToken] = useState('');
+  const [notification, setNotification] = useState(false);
   const notificationListener = useRef();
   const responseListener = useRef();
+
   const clicked =()=> alert("You've drunk water! Good job, dude");
-  
   useEffect(() => {
-    if(Constants.isDevice && Platform.OS !== 'web') {  registerForPushNotificationsAsync().then(token => {     axios.post(`https://nativenotify.com/api/expo/key`, { appId: 498, appToken: 'XB12b5WmzGgBiDSX9bs8dD', expoToken: token })   });  responseListener.current = Notifications.addNotificationResponseReceivedListener(response => console.log(response));  return () => { Notifications.removeNotificationSubscription(notificationListener); Notifications.removeNotificationSubscription(responseListener); };}
-  });
+    registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
+
+    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+      setNotification(notification);
+    });
+
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+      console.log(response);
+    });
+
+    return () => {
+      Notifications.removeNotificationSubscription(notificationListener.current);
+      Notifications.removeNotificationSubscription(responseListener.current);
+    };
+  }, []);
 
   return (
    
@@ -30,10 +52,53 @@ export default function App() {
         height:250,
         uri: "https://cdn-icons-png.flaticon.com/512/1967/1967685.png"
       }}/>
-      <Button style={styles.button} title='Drink water' onPress={clicked} style={styles.button}/>
+      <Button style={styles.button} title='Drink water' onPress={clicked, async () => {
+          await schedulePushNotification();}}/>
       <StatusBar style="auto" />
     </SafeAreaView>
   );
+}
+
+async function schedulePushNotification() {
+  await Notifications.scheduleNotificationAsync({
+    content: {
+      title: "Don't forget about watter!",
+      body: 'Drink it',
+      data: { data: 'goes here' },
+    },
+    trigger: { seconds: 2 },
+  });
+}
+
+async function registerForPushNotificationsAsync() {
+  let token;
+  if (Constants.isDevice) {
+    const { status: existingStatus } = await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+    if (existingStatus !== 'granted') {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+    if (finalStatus !== 'granted') {
+      alert('Failed to get push token for push notification!');
+      return;
+    }
+    token = (await Notifications.getExpoPushTokenAsync()).data;
+    console.log(token);
+  } else {
+    alert('Must use physical device for Push Notifications');
+  }
+
+  if (Platform.OS === 'android') {
+    Notifications.setNotificationChannelAsync('default', {
+      name: 'default',
+      importance: Notifications.AndroidImportance.MAX,
+      vibrationPattern: [0, 250, 250, 250],
+      lightColor: '#FF231F7C',
+    });
+  }
+
+  return token;
 }
 
 const styles = StyleSheet.create({
