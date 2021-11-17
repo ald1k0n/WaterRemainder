@@ -2,12 +2,12 @@ import { StatusBar } from 'expo-status-bar';
 import Constants from 'expo-constants';
 import * as Notifications from 'expo-notifications';
 import React,  { useState, useEffect, useRef, Component } from 'react';
-import { SafeAreaView,ImageBackground, StyleSheet, Text, View, Button,Image, Dimensions,TouchableOpacity } from 'react-native';
+import { SafeAreaView, ImageBackground, StyleSheet, Text, View, Button, Image, Dimensions, TouchableOpacity, Alert } from 'react-native';
 import { Platform } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 
-
-import axios from 'axios';
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -17,14 +17,48 @@ Notifications.setNotificationHandler({
   }),
 });
 
+function HomeScreen({ navigation }) {
+  return (
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.text}>Water Reminder</Text>
+      <View style={styles.rect}></View>
+      <Image source={{
+        width:250,
+        height:250,
+        uri: "https://cdn-icons-png.flaticon.com/512/1967/1967685.png"
+      }}/>
+      <TouchableOpacity style={styles.button} onPress={async () => {
+          await schedulePushNotification();}}>
+            <Text style={{color: "white"}}>Drink Water!</Text>
+          </TouchableOpacity>
+      <TouchableOpacity
+        title="FAQ"
+        onPress={() => navigation.navigate('Details')}
+      >
+        <Text>FAQ</Text>
+      </TouchableOpacity>
+      <StatusBar style="auto" />
+    </SafeAreaView>
+  );
+}
+
+function DetailsScreen() {
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text style={{fontSize: 20}}> 1) Loss of excess weight. If you drink a glass of water before a meal, your stomach will begin to work more efficiently. Often water helps a person overcome a false sense of hunger.{"\n"}
+      2) Facilitation of the work of internal organs. Fluid reduces the load on the liver and kidneys, removes toxins and harmful substances from the body.{"\n"}
+       3) Combat fatigue. It is especially important to drink water for those who play sports and train regularly.</Text>
+    </View>
+  );
+}
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   const [expoPushToken, setExpoPushToken] = useState('');
   const [notification, setNotification] = useState(false);
   const notificationListener = useRef();
   const responseListener = useRef();
-
-  const clicked =()=> alert("You've drunk water! Good job, dude");
   useEffect(() => {
     registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
 
@@ -43,19 +77,12 @@ export default function App() {
   }, []);
 
   return (
-   
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.text}>Water Reminder</Text>
-      <View style={styles.rect}></View>
-      <Image source={{
-        width:250,
-        height:250,
-        uri: "https://cdn-icons-png.flaticon.com/512/1967/1967685.png"
-      }}/>
-      <Button style={styles.button} title='Drink water' onPress={clicked, async () => {
-          await schedulePushNotification();}}/>
-      <StatusBar style="auto" />
-    </SafeAreaView>
+    <NavigationContainer>
+    <Stack.Navigator initialRouteName="Home">
+      <Stack.Screen name="WaterReminder v1.0.0" component={HomeScreen} />
+      <Stack.Screen name="Details" component={DetailsScreen} />
+    </Stack.Navigator>
+  </NavigationContainer>
   );
 }
 
@@ -104,7 +131,7 @@ async function registerForPushNotificationsAsync() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "rgba(7,7,7,1)",
+    backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center"
   },
@@ -136,8 +163,8 @@ const styles = StyleSheet.create({
   },
 
   text: {
-    color: "rgba(254,246,246,1)",
+    color: "#000000",
     fontSize: 20
   },
-
 });
+
