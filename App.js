@@ -45,9 +45,14 @@ function HomeScreen({ navigation }) {
 function DetailsScreen() {
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text style={{fontSize: 20}}> 1) Loss of excess weight. If you drink a glass of water before a meal, your stomach will begin to work more efficiently. Often water helps a person overcome a false sense of hunger.{"\n"}
-      2) Facilitation of the work of internal organs. Fluid reduces the load on the liver and kidneys, removes toxins and harmful substances from the body.{"\n"}
-       3) Combat fatigue. It is especially important to drink water for those who play sports and train regularly.</Text>
+      <Text style={{top:-90, fontSize:30, fontWeight:'bold'}}>FAQ: </Text>
+      <Text style={{fontSize: 20}}>
+         1) Loss of excess weight. If you drink a glass of water before a meal, your stomach will begin to work more efficiently. Often water helps a person overcome a false sense of hunger.{"\n"}{"\n"}
+      2) Facilitation of the work of internal organs. Fluid reduces the load on the liver and kidneys, removes toxins and harmful substances from the body.{"\n"}{"\n"}
+       3) Combat fatigue. It is especially important to drink water for those who play sports and train regularly.{"\n"}{"\n"}{"\n"}
+       Thank you for using our application!
+       </Text>
+       <Text style={{top:150}}>Kaspi: +77058743672, +77056824600, +77786719478</Text>
     </View>
   );
 }
@@ -93,7 +98,7 @@ async function schedulePushNotification() {
       body: 'Drink it',
       data: { data: 'goes here' },
     },
-    trigger: { seconds: 2 },
+    trigger: { seconds: 10 },
   });
 }
 
